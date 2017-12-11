@@ -1,25 +1,25 @@
-"""
-https://adventofcode.com/2016/day/4
-"""
 import re
 import string
 
+"""
+https://adventofcode.com/2016/day/4
+"""
 
-def getSectorID(string):
-  return int(re.search(r'\d+',string).group(0))
+def getSectorID(input_string):
+  return int(re.search(r'\d+',input_string).group(0))
 
-def getCheckSum(string):
-  return re.search(r'\[([a-z]{5})\]',string).group(0)[1:-1]
+def getCheckSum(input_string):
+  return re.search(r'\[([a-z]{5})\]',input_string).group(0)[1:-1]
 
-def getEncryptedName(string,dash_to_space=False):
+def getEncryptedName(input_string,dash_to_space=False):
   if dash_to_space == False:
-    return re.match(r'[a-z\-]*',string).group(0)[:-1].replace('-','')
+    return re.match(r'[a-z\-]*',input_string).group(0)[:-1].replace('-','')
   else:
-    return re.match(r'[a-z\-]*',string).group(0)[:-1].replace('-',' ')
+    return re.match(r'[a-z\-]*',input_string).group(0)[:-1].replace('-',' ')
 
 
-def checkRoom(string):
-  encryption = getEncryptedName(string)
+def checkRoom(input_string):
+  encryption = getEncryptedName(input_string)
   c_dict = {}
   for c in set(encryption):
     if encryption.count(c) not in c_dict:
@@ -30,7 +30,7 @@ def checkRoom(string):
   for k in sorted(c_dict.items(),reverse=True):
     for v in sorted(k[1]):
       checksum+=v
-  return checksum[:5] == getCheckSum(string)
+  return checksum[:5] == getCheckSum(input_string)
 
 def sumOfValidRooms(inputs):
   room_list = [l for l in inputs.split('\n')]
