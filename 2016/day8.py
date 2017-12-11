@@ -1,0 +1,246 @@
+import re
+from collections import deque
+
+"""
+https://adventofcode.com/2016/day/8
+"""
+
+def initScreen(rows=6,columns=50):
+  screen = []
+  for _ in range(rows):
+    r = []
+    for _ in range(columns):
+      r.append(0)
+    screen.append(r)
+  return screen
+
+
+def runSequence(input_string):
+  screen = initScreen()
+  sequence = [s for s in input_string.split('\n')]
+  for s in sequence:
+    if "rect" in s:
+      rows,cols = rect(s)
+      for r in range(rows):
+        for c in range(cols):
+          screen[r][c] = 1
+
+    elif "column" in s:
+      col, shifts = getColumn(s)
+      column = [row[col] for row in screen]
+      rotated = deque(column)
+      rotated.rotate(shifts)
+      column = list(rotated)
+      for i in range(len(screen)):
+        screen[i][col] = column[i]
+
+    else:
+      r,shifts = getRow(s)
+      row = screen[r]
+      rotated = deque(row)
+      rotated.rotate(shifts)
+      row = list(rotated)
+      screen[r] = row
+
+  total = sum([sum(r) for r in screen])
+  return total # Part 1 solves, part 2 can be printed and figured out
+
+
+
+
+def rect(command):
+  cols = re.search(r'([0-9]+)',command).group(0)
+  rows = re.search(r'([0-9]+$)',command).group(0)
+  return int(rows),int(cols)
+
+def getColumn(command):
+  col = re.search(r'(.*x=)(\d+)( by \d+)',command).group(2)
+  shifts = re.search(r'(.*x=)(\d+)( by )(\d+)',command).group(4)
+  return int(col),int(shifts)
+
+def getRow(command):
+  row = re.search(r'(.*y=)(\d+)( by \d+)',command).group(2)
+  shifts = re.search(r'(.*y=)(\d+)( by )(\d+)',command).group(4)
+  return int(row),int(shifts)
+
+
+unit_test1 = """rect 3x2
+rotate column x=1 by 1
+rotate row y=0 by 4
+rotate column x=1 by 1"""
+
+final_test1 = """rect 1x1
+rotate row y=0 by 20
+rect 1x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 3
+rect 2x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 3
+rect 2x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 4
+rect 2x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 3
+rect 2x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 5
+rect 1x1
+rotate row y=0 by 2
+rect 1x1
+rotate row y=0 by 6
+rect 5x1
+rotate row y=0 by 2
+rect 1x3
+rotate row y=2 by 8
+rotate row y=0 by 8
+rotate column x=0 by 1
+rect 7x1
+rotate row y=2 by 24
+rotate row y=0 by 20
+rotate column x=5 by 1
+rotate column x=4 by 2
+rotate column x=2 by 2
+rotate column x=0 by 1
+rect 7x1
+rotate column x=34 by 2
+rotate column x=22 by 1
+rotate column x=15 by 1
+rotate row y=2 by 18
+rotate row y=0 by 12
+rotate column x=8 by 2
+rotate column x=7 by 1
+rotate column x=5 by 2
+rotate column x=2 by 1
+rotate column x=0 by 1
+rect 9x1
+rotate row y=3 by 28
+rotate row y=1 by 28
+rotate row y=0 by 20
+rotate column x=18 by 1
+rotate column x=15 by 1
+rotate column x=14 by 1
+rotate column x=13 by 1
+rotate column x=12 by 2
+rotate column x=10 by 3
+rotate column x=8 by 1
+rotate column x=7 by 2
+rotate column x=6 by 1
+rotate column x=5 by 1
+rotate column x=3 by 1
+rotate column x=2 by 2
+rotate column x=0 by 1
+rect 19x1
+rotate column x=34 by 2
+rotate column x=24 by 1
+rotate column x=23 by 1
+rotate column x=14 by 1
+rotate column x=9 by 2
+rotate column x=4 by 2
+rotate row y=3 by 5
+rotate row y=2 by 3
+rotate row y=1 by 7
+rotate row y=0 by 5
+rotate column x=0 by 2
+rect 3x2
+rotate column x=16 by 2
+rotate row y=3 by 27
+rotate row y=2 by 5
+rotate row y=0 by 20
+rotate column x=8 by 2
+rotate column x=7 by 1
+rotate column x=5 by 1
+rotate column x=3 by 3
+rotate column x=2 by 1
+rotate column x=1 by 2
+rotate column x=0 by 1
+rect 9x1
+rotate row y=4 by 42
+rotate row y=3 by 40
+rotate row y=1 by 30
+rotate row y=0 by 40
+rotate column x=37 by 2
+rotate column x=36 by 3
+rotate column x=35 by 1
+rotate column x=33 by 1
+rotate column x=32 by 1
+rotate column x=31 by 3
+rotate column x=30 by 1
+rotate column x=28 by 1
+rotate column x=27 by 1
+rotate column x=25 by 1
+rotate column x=23 by 3
+rotate column x=22 by 1
+rotate column x=21 by 1
+rotate column x=20 by 1
+rotate column x=18 by 1
+rotate column x=17 by 1
+rotate column x=16 by 3
+rotate column x=15 by 1
+rotate column x=13 by 1
+rotate column x=12 by 1
+rotate column x=11 by 2
+rotate column x=10 by 1
+rotate column x=8 by 1
+rotate column x=7 by 2
+rotate column x=5 by 1
+rotate column x=3 by 3
+rotate column x=2 by 1
+rotate column x=1 by 1
+rotate column x=0 by 1
+rect 39x1
+rotate column x=44 by 2
+rotate column x=42 by 2
+rotate column x=35 by 5
+rotate column x=34 by 2
+rotate column x=32 by 2
+rotate column x=29 by 2
+rotate column x=25 by 5
+rotate column x=24 by 2
+rotate column x=19 by 2
+rotate column x=15 by 4
+rotate column x=14 by 2
+rotate column x=12 by 3
+rotate column x=9 by 2
+rotate column x=5 by 5
+rotate column x=4 by 2
+rotate row y=5 by 5
+rotate row y=4 by 38
+rotate row y=3 by 10
+rotate row y=2 by 46
+rotate row y=1 by 10
+rotate column x=48 by 4
+rotate column x=47 by 3
+rotate column x=46 by 3
+rotate column x=45 by 1
+rotate column x=43 by 1
+rotate column x=37 by 5
+rotate column x=36 by 5
+rotate column x=35 by 4
+rotate column x=33 by 1
+rotate column x=32 by 5
+rotate column x=31 by 5
+rotate column x=28 by 5
+rotate column x=27 by 5
+rotate column x=26 by 3
+rotate column x=25 by 4
+rotate column x=23 by 1
+rotate column x=17 by 5
+rotate column x=16 by 5
+rotate column x=13 by 1
+rotate column x=12 by 5
+rotate column x=11 by 5
+rotate column x=3 by 1
+rotate column x=0 by 1"""
+
+print(runSequence(final_test1))
