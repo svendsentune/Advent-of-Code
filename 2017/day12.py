@@ -1,5 +1,7 @@
 """
-http://adventofcode.com/2017/day/7
+http://adventofcode.com/2017/day/12
+
+See bottom for solution using the NetworkX module
 """
 
 def createDict(some_string):
@@ -2049,3 +2051,20 @@ final_test1 = """0 <-> 199, 1774
 1999 <-> 175, 1161"""
 
 #print(countGroups(final_test1))
+
+
+"""import networkx as nx
+
+# Create a graph of programs
+graph = nx.Graph()
+
+for line in LINES:
+    # Parse the line
+    node, neighbors = line.split(' <-> ')
+
+    # Add edges defined by this line
+    graph.add_edges_from((node, neighbor) for neighbor in neighbors.split(', '))
+
+print('Part 1:', len(nx.node_connected_component(graph, '0')))
+print('Part 2:', nx.number_connected_components(graph))
+"""
