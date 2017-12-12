@@ -26,7 +26,6 @@ def memoryAllocation(t):
     cycle+=1
     if states[i2s(l)] == 2:
       done = True
-      print('yoooo',states)
     else:
       states[i2s(l)]+=1
   return cycle
