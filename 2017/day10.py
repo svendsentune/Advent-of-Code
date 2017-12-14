@@ -6,7 +6,6 @@ import numpy as np
 from functools import reduce
 
 def knotHash(inputs):
-
   input_lengths = [int(i) for i in convertToAscii(inputs).split(",")]
   output_list = list(range(256))
   skip_size = 0
@@ -35,9 +34,7 @@ def knotHash(inputs):
       pos = index_value
       skip_size+=1
 
-  print(len(set(output_list)))
   output_list = convertToSparse(output_list)
-  print(output_list)
   output_list = convert2Hex(output_list)
 
   return output_list
@@ -68,7 +65,8 @@ def convertToSparse(denselist):
 
 testdata = "1,2,3"
 
-print(knotHash("189,1,111,246,254,2,0,120,215,93,255,50,84,15,94,62"))
+#print(knotHash("189,1,111,246,254,2,0,120,215,93,255,50,84,15,94,62"))
+#print(knotHash('flqrgnkx-0'))
 """
 The empty string becomes a2582a3a0e66e6e86e3812dcb672a272.
 AoC 2017 becomes 33efeb34ea91902bb2f59c9920caa6cd.
